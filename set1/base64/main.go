@@ -13,10 +13,10 @@ import (
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	str, err := reader.ReadString('\n')
-	str = strings.Trim(str, "\n")
 	if err != nil {
 		log.Fatalf("no hex string entered : %v", err)
 	}
+	str = strings.Trim(str, "\n")
 
 	bytes, err := hex.DecodeString(str)
 	if err != nil {
