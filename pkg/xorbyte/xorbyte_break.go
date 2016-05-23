@@ -34,7 +34,7 @@ func Break(ciphertext []byte) ([]byte, []byte) {
 }
 
 func BreakKeySize(ciphertext []byte) int {
-	maxKeySize := 10
+	maxKeySize := 128
 	if len(ciphertext)/2 < maxKeySize {
 		maxKeySize = len(ciphertext) / 2
 	}
