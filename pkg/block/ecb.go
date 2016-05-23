@@ -1,6 +1,12 @@
 package block
 
-import "crypto/cipher"
+import (
+	"bytes"
+	"compress/gzip"
+	"crypto/cipher"
+	"fmt"
+	"os"
+)
 
 func ECBEncrypt(dst, src []byte, blockCipher cipher.Block) {
 
@@ -25,4 +31,17 @@ func ECBDecrypt(dst, src []byte, blockCipher cipher.Block) {
 		blockCipher.Decrypt(dst[i*blockSize:(i+1)*blockSize],
 			src[i*blockSize:(i+1)*blockSize])
 	}
+}
+
+// just check the compressed length
+func ECBCiphertextScore(ciphertext []byte) int {
+	var b bytes.Buffer
+	gz := gzip.NewWriter(&b)
+	if _, err := gz.Write(ciphertext); err != nil {
+		fmt.Fprintf(os.Stderr, "could not gzip data")
+		os.Exit(1)
+	}
+	gz.Flush()
+	gz.Close()
+	return b.Len()
 }
