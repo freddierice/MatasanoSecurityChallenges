@@ -46,3 +46,21 @@ func EncryptAesEcbPrepend(plaintext []byte) []byte {
 	block.ECBEncrypt(ciphertext, plaintext, aesCipher)
 	return ciphertext
 }
+
+func EncryptAesEcbInsert(plaintext []byte) []byte {
+
+	randbytes := util.GenerateRandomBytesRange(1, 65)
+
+	plaintext = append(randbytes, plaintext...)
+	plaintext = append(plaintext, message...)
+	aesCipher, err := aes.NewCipher(key)
+	if err != nil {
+		panic("aes did something weird")
+	}
+
+	plaintext = block.Pad(plaintext, len(key))
+	ciphertext := make([]byte, len(plaintext))
+
+	block.ECBEncrypt(ciphertext, plaintext, aesCipher)
+	return ciphertext
+}
