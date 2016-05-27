@@ -3,6 +3,7 @@ package block
 import (
 	"crypto/cipher"
 	"errors"
+	"sync"
 
 	"../xorbyte"
 )
@@ -45,23 +46,31 @@ func CBCDecrypt(dst, src []byte, blockCipher cipher.Block) error {
 	}
 
 	blockchan := make(chan int, NWORKERS)
+	wg := &sync.WaitGroup{}
 	worker := func() {
-		if block, ok := <-blockchan; ok {
-			start0 := block * blockSize
-			start1 := start0 + blockSize
-			start2 := start1 + blockSize
-			blockCipher.Decrypt(dst[start0:start1], src[start1:start2])
-			xorbyte.XOR(dst[start0:start1], src[start0:start1])
+		defer wg.Done()
+		for {
+			if block, ok := <-blockchan; ok {
+				start0 := block * blockSize
+				start1 := start0 + blockSize
+				start2 := start1 + blockSize
+				blockCipher.Decrypt(dst[start0:start1], src[start1:start2])
+				xorbyte.XOR(dst[start0:start1], src[start0:start1])
+			} else {
+				break
+			}
 		}
 	}
 
 	for i := 0; i < NWORKERS; i++ {
 		go worker()
+		wg.Add(1)
 	}
 	for i := 0; i < len(dst)/blockSize; i++ {
 		blockchan <- i
 	}
 	close(blockchan)
+	wg.Wait()
 
 	return nil
 }
