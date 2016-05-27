@@ -1,4 +1,4 @@
-package oracle
+package breakcrypto
 
 import (
 	"bytes"
@@ -6,17 +6,18 @@ import (
 	"fmt"
 	"testing"
 
+	"../oracle"
 	"../util"
 )
 
 func TestGetEncryptedForm(t *testing.T) {
 	testBytes := util.GenerateRandomBytes(blockSize)
 	blockSize := 16
-	o := EncryptAesEcbInsert
+	o := oracle.EncryptAesEcbInsert
 
 	LoadEncryptedPaddingBytes(o)
 
-	actual := EncryptAesEcb(testBytes)[0:blockSize]
+	actual := oracle.EncryptAesEcb(testBytes)[0:blockSize]
 	guess := GetEncryptedForm(o, testBytes)
 	if !bytes.Equal(guess, actual) {
 		fmt.Printf("recieved: %v\n", hex.EncodeToString(guess))
@@ -48,6 +49,6 @@ func TestBreakInsertECBOracle(t *testing.T) {
 		}
 	}
 
-	m := BreakInsertECBOracle(EncryptAesEcbInsert, charset)
+	m := BreakInsertECBOracle(oracle.EncryptAesEcbInsert, charset)
 	fmt.Println(m)
 }

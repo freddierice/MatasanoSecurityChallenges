@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"../../../pkg/breakcrypto"
 	"../../../pkg/oracle"
 )
 
@@ -21,6 +22,6 @@ func init() {
 }
 
 func main() {
-	message := oracle.BreakPrependECBOracle(oracle.EncryptAesEcbPrepend, charset)
+	message := breakcrypto.BreakPrependECBOracle(oracle.EncryptAesEcbPrepend, charset)
 	fmt.Printf("The message is: \n%s\n", message)
 }

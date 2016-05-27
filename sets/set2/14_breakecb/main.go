@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"../../../pkg/breakcrypto"
 	"../../../pkg/oracle"
 )
 
@@ -21,6 +22,6 @@ func init() {
 }
 
 func main() {
-	m := oracle.BreakInsertECBOracle(oracle.EncryptAesEcbInsert, charset)
+	m := breakcrypto.BreakInsertECBOracle(oracle.EncryptAesEcbInsert, charset)
 	fmt.Println(m)
 }

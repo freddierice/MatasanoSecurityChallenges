@@ -1,4 +1,4 @@
-package oracle
+package breakcrypto
 
 import "bytes"
 
