@@ -25,7 +25,7 @@ func main() {
 	}
 
 	key := []byte("YELLOW SUBMARINE")
-	iv := []byte("0000000000000000")
+	iv := []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	ciphertext := make([]byte, len(str)+len(iv))
 	plaintext := make([]byte, len(str))
 
